@@ -1,0 +1,19 @@
+ext {
+    ver = [
+        guavaVul: '18.0',
+        guavaVerRange: '16+',
+        slf4j: '1.7.12'
+    ]
+    
+    groupName = [
+      guavaVul: 'com.google.guava',
+      guavaVerRange: 'com.google.guava',
+      slf4j: 'org.slf4j'
+    ]
+    
+    artifactName = [
+      guavaVul: 'guava',
+      guavaVerRange: 'guava',
+      slf4j: 'slf4j-api'
+    ]
+}

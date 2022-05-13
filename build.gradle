@@ -1,0 +1,65 @@
+repositories {
+  maven 
+     {
+       url 'http://artifactory-slc.oraclecorp.com/artifactory/remote-repos'
+     }
+}
+
+apply plugin: 'java'
+apply plugin: 'maven'
+
+apply from: "dependency.gradle"
+
+sourceCompatibility = 1.8 // java 8
+targetCompatibility = 1.8
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives sourcesJar
+    archives javadocJar
+}
+
+task initProp(type: JavaExec){
+    systemProperty "Production", System.getProperty("P")   //this variable comes from command variable
+    rootProject.ext.set("Production", "ReleaseVersion");
+}
+
+dependencies {
+  
+  // Spring-Core
+  compile 'org.springframework.security:spring-security-core:5.0.16.RELEASE'
+  //compile group: 'org.springframework.security', name:'spring-security-core', version: '5.0.1.RELEASE'
+  compile 'org.apache.maven:maven-profile:2.2.1'
+  
+  // Guava
+  if(rootProject.ext.Production == "ReleaseVersion"){
+     compile group: groupName.guavaVul, name: artifactName.guavaVul, version: ver.guavaVul
+  } else {
+     compile group: groupName.guavaVerRange, name: artifactName.guavaVerRange, version: ver.guavaVerRange
+  }
+     
+  compile 'org.slf4j:slf4j-api:1.7.12'
+  
+}
+
+gradle.taskGraph.whenReady {taskGraph ->
+  def tasks = taskGraph.getAllTasks()
+  for(def taskR in tasks)
+     println taskR
+}
+
+// Force these non vulnerable versions on the dependencies to resolve the vulnerabilities found in them.
+configurations.all { 
+  resolutionStrategy {
+    force 'com.google.guava:guava:25.1-jre'
+  }
+}

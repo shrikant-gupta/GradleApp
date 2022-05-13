@@ -1,0 +1,17 @@
+initscript{
+  repositories {
+    maven
+      {
+        url 'http://artifactory-slc.oraclecorp.com/artifactory/infratools-dev-local'
+      }
+    }
+
+  dependencies {
+    classpath 'com.oracle.oscs.plugin:oscs-gradleplugin:2.0'
+  }
+}
+
+allprojects {
+  apply plugin: org.gradle.api.plugins.JavaPlugin
+}
+
