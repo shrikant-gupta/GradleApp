@@ -1,0 +1,3 @@
+gradle-simple.git
+
+"# GradleApp" 
